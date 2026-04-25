@@ -1,0 +1,109 @@
+<div class="flex flex-col lg:flex-row min-h-screen bg-slate-100">
+  <div
+    class="relative w-full lg:w-1/2 flex items-center justify-center px-6 pt-16 pb-20 lg:p-12 min-h-[45vh] lg:min-h-screen bg-[url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center"
+  >
+    <div class="absolute inset-0 bg-slate-900/60"></div>
+
+    <div class="relative z-10 max-w-md text-center">
+      <h1 class="text-4xl lg:text-5xl font-bold text-white mb-4 lg:mb-6 tracking-tight">
+        RentWheelz
+      </h1>
+      <p class="text-slate-200 text-base lg:text-lg leading-relaxed">
+        Experience the freedom of the road with our premium car rental service. Fast, easy, and
+        reliable.
+      </p>
+
+      <div class="mt-8 lg:mt-10">
+        <div
+          class="inline-block p-3 lg:p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-lg"
+        >
+          <span class="text-white text-xs lg:text-sm font-medium tracking-wide"
+            >⭐ Trusted by 10,000+ Customers</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="w-full lg:w-1/2 flex items-start lg:items-center justify-center px-4 sm:px-8 pb-12 lg:py-12 -mt-10 lg:mt-0 relative z-20"
+  >
+    <div
+      class="max-w-md w-full bg-white rounded-3xl shadow-2xl border border-slate-100 p-8 sm:p-10"
+    >
+      <div class="text-center mb-8">
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight">Welcome Back</h2>
+        <p class="text-slate-500 mt-2 text-sm sm:text-base">Please enter your details to sign in</p>
+      </div>
+
+      <div
+        *ngIf="errorMessage"
+        class="mb-6 p-4 text-sm text-red-700 bg-red-50 rounded-xl border border-red-100 flex items-center"
+      >
+        <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+        {{ errorMessage }}
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Email Address</label>
+          <input
+            type="email"
+            formControlName="email"
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
+            placeholder="Enter your email"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Password</label>
+          <input
+            type="password"
+            formControlName="password"
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
+            placeholder="••••••••"
+          />
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="loginForm.invalid || isLoading"
+          class="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none mt-2"
+        >
+          <span *ngIf="!isLoading">Sign In</span>
+          <span *ngIf="isLoading" class="flex items-center justify-center">
+            <svg class="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24">
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            Signing in...
+          </span>
+        </button>
+      </form>
+
+      <p class="text-center mt-8 text-slate-600 text-sm sm:text-base">
+        Don't have an account?
+        <a routerLink="/register" class="text-blue-600 font-bold hover:underline"
+          >Create an account</a
+        >
+      </p>
+    </div>
+  </div>
+</div>

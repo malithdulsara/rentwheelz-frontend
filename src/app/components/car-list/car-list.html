@@ -1,0 +1,70 @@
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+        Available Cars for Rent
+      </h2>
+      <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
+        Choose the best ride for your next journey from our premium fleet.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      <div *ngFor="let car of cars" 
+           class="max-w-sm bg-white border border-gray-200 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col">
+        
+        <div class="relative h-56 overflow-hidden">
+          <img class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500" 
+               [src]="car.imageUrl || 'assets/placeholder-car.jpg'" 
+               alt="Car Image" />
+          
+          <div class="absolute top-4 right-4">
+            <span [ngClass]="car.status === 'AVAILABLE' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'" 
+                  class="text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+              {{ car.status }}
+            </span>
+          </div>
+        </div>
+
+        <div class="p-6 flex-grow">
+          <div class="flex justify-between items-start mb-2">
+            <h5 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              {{ car.brand }} {{ car.model }}
+            </h5>
+          </div>
+          
+          <div class="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <span class="flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              {{ car.fuelType }}
+            </span>
+            <span class="flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+              {{ car.seatingCapacity }} Seats
+            </span>
+          </div>
+
+          <div class="flex items-baseline mb-6">
+            <span class="text-3xl font-extrabold text-blue-600 dark:text-blue-500">Rs. {{ car.pricePerDay }}</span>
+            <span class="ml-1 text-gray-500">/ day</span>
+          </div>
+        </div>
+
+        <div class="p-6 pt-0 mt-auto">
+          <button [disabled]="car.status !== 'AVAILABLE'"
+                  class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-bold rounded-xl text-sm px-5 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">
+            Book Now
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <div *ngIf="cars.length === 0" class="text-center py-24 bg-white rounded-3xl shadow-sm border border-dashed border-gray-300 mt-12">
+      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 9.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900">No cars found</h3>
+      <p class="mt-1 text-sm text-gray-500">Check back later for new arrivals.</p>
+    </div>
+  </div>
+</div>

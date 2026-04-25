@@ -1,0 +1,52 @@
+<aside class="flex flex-col w-64 h-screen px-5 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l border-slate-200">
+    
+    <div class="flex items-center gap-x-3 px-2">
+        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+            <span class="text-white font-bold text-xl">RW</span>
+        </div>
+        <span class="text-xl font-bold text-slate-800">RentWheelz</span>
+    </div>
+
+    <div class="flex flex-col justify-between flex-1 mt-6">
+        <nav class="flex-1 -mx-3 space-y-1">
+            
+            <a *ngIf="shouldShow(['ROLE_ADMIN','ROLE_FLEET_MANAGER'])" 
+               routerLink="/dashboard" routerLinkActive="bg-blue-50 text-blue-600 font-semibold"
+               class="flex items-center px-3 py-2 text-slate-600 transition-colors duration-300 transform rounded-lg hover:bg-slate-100 hover:text-slate-700">
+                <span class="mx-2 text-sm font-medium">Dashboard</span>
+            </a>
+
+            <a routerLink="/cars" routerLinkActive="bg-blue-50 text-blue-600 font-semibold"
+               class="flex items-center px-3 py-2 text-slate-600 transition-colors duration-300 transform rounded-lg hover:bg-slate-100 hover:text-slate-700">
+                <span class="mx-2 text-sm font-medium">Car Catalog</span>
+            </a>
+
+            <a *ngIf="shouldShow(['ROLE_CUSTOMER'])" 
+               routerLink="/my-bookings" routerLinkActive="bg-blue-50 text-blue-600 font-semibold"
+               class="flex items-center px-3 py-2 text-slate-600 transition-colors duration-300 transform rounded-lg hover:bg-slate-100 hover:text-slate-700">
+                <span class="mx-2 text-sm font-medium">My Bookings</span>
+            </a>
+
+            <a *ngIf="shouldShow(['ROLE_FLEET_MANAGER', 'ROLE_ADMIN'])"
+               routerLink="/inventory" routerLinkActive="bg-blue-50 text-blue-600 font-semibold"
+               class="flex items-center px-3 py-2 text-slate-600 transition-colors duration-300 transform rounded-lg hover:bg-slate-100 hover:text-slate-700">
+                <span class="mx-2 text-sm font-medium">Manage Inventory</span>
+            </a>
+
+            <a *ngIf="shouldShow(['ROLE_ADMIN', 'ROLE_FLEET_MANAGER'])"
+               routerLink="/bookings" routerLinkActive="bg-blue-50 text-blue-600 font-semibold"
+               class="flex items-center px-3 py-2 text-slate-600 transition-colors duration-300 transform rounded-lg hover:bg-slate-100 hover:text-slate-700">
+                <span class="mx-2 text-sm font-medium">
+                    {{ userRole === 'ROLE_ADMIN' ? 'Booking Requests' : 'Fleet Schedule' }}
+                </span>
+            </a>
+
+            <a *ngIf="shouldShow(['ROLE_ADMIN'])"
+               routerLink="/users" routerLinkActive="bg-blue-50 text-blue-600 font-semibold"
+               class="flex items-center px-3 py-2 text-slate-600 transition-colors duration-300 transform rounded-lg hover:bg-slate-100 hover:text-slate-700">
+                <span class="mx-2 text-sm font-medium">User Management</span>
+            </a>
+
+        </nav>
+    </div>
+</aside>

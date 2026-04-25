@@ -1,0 +1,193 @@
+<div class="p-6 bg-slate-50 min-h-full">
+  <!-- Header Section -->
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-800">Available Cars</h1>
+      <p class="text-sm text-slate-500 mt-1">Choose your perfect ride from our premium fleet.</p>
+    </div>
+  </div>
+
+  @if (errorMessage) {
+    <div class="p-4 mb-6 text-sm text-red-700 bg-red-50 rounded-xl border border-red-100">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <div
+    class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-8 flex flex-col md:flex-row gap-4 items-center justify-between"
+  >
+    <div class="relative w-full md:w-1/3">
+      <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+        <i class="fas fa-search text-slate-400"></i>
+      </div>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="applyFilters()"
+        class="bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 outline-none transition-all"
+        placeholder="Search brand or model..."
+      />
+    </div>
+
+    <div class="flex flex-wrap md:flex-nowrap gap-4 w-full md:w-auto">
+      <select
+        [(ngModel)]="selectedBrand"
+        (ngModelChange)="applyFilters()"
+        class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full md:w-40 p-2.5 outline-none cursor-pointer"
+      >
+        <option value="">All Brands</option>
+        @for (brand of availableBrands; track brand) {
+          <option [value]="brand">{{ brand }}</option>
+        }
+      </select>
+
+      <select
+        [(ngModel)]="selectedFuelType"
+        (ngModelChange)="applyFilters()"
+        class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full md:w-40 p-2.5 outline-none cursor-pointer"
+      >
+        <option value="">All Fuel Types</option>
+        @for (fuel of availableFuelTypes; track fuel) {
+          <option [value]="fuel" class="capitalize">{{ fuel | lowercase }}</option>
+        }
+      </select>
+
+      <div class="flex items-center space-x-2">
+        <input
+          type="number"
+          [(ngModel)]="minPrice"
+          (ngModelChange)="applyFilters()"
+          placeholder="Min Rs."
+          class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-24 p-2.5 outline-none"
+        />
+        <span class="text-slate-400">-</span>
+        <input
+          type="number"
+          [(ngModel)]="maxPrice"
+          (ngModelChange)="applyFilters()"
+          placeholder="Max Rs."
+          class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-24 p-2.5 outline-none"
+        />
+      </div>
+
+      <button
+        (click)="clearFilters()"
+        class="text-sm font-medium text-slate-500 hover:text-blue-600 px-4 py-2 rounded-xl hover:bg-blue-50 transition-colors whitespace-nowrap"
+      >
+        Clear All
+      </button>
+    </div>
+  </div>
+  <div class="max-w-7xl mx-auto mb-8 flex justify-end">
+    <label
+      class="flex items-center cursor-pointer px-5 py-2.5 rounded-2xl shadow-sm border transition-all duration-300 hover:shadow-md"
+      [ngClass]="showAvailableOnly ? 'bg-blue-50 border-blue-300' : 'bg-white border-slate-200'"
+    >
+      <div class="relative">
+        <input
+          type="checkbox"
+          [(ngModel)]="showAvailableOnly"
+          (ngModelChange)="onToggleChange()"
+          class="sr-only"
+        />
+
+        <div
+          class="block w-12 h-7 rounded-full transition-colors duration-300 shadow-inner"
+          [ngClass]="showAvailableOnly ? 'bg-blue-600' : 'bg-slate-300'"
+        ></div>
+
+        <div
+          class="dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full shadow transition-transform duration-300"
+          [ngClass]="showAvailableOnly ? 'transform translate-x-5' : ''"
+        ></div>
+      </div>
+
+      <div
+        class="ml-3 text-sm font-extrabold transition-colors duration-300"
+        [ngClass]="showAvailableOnly ? 'text-blue-700' : 'text-slate-600'"
+      >
+        @if (showAvailableOnly) {
+          Showing Available Only
+        } @else {
+          Show Available Only
+        }
+      </div>
+    </label>
+  </div>
+  @if (isLoading) {
+    <div class="flex justify-center items-center h-64">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      @for (car of displayedCars; track car.carId || car.id) {
+        <div
+          class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow flex flex-col"
+        >
+          <div class="h-48 bg-slate-100 flex items-center justify-center overflow-hidden relative">
+            @if (car.imageUrl) {
+              <img
+                [src]="car.imageUrl"
+                [alt]="car.brand + ' ' + car.model"
+                class="w-full h-full object-cover"
+              />
+            } @else {
+              <i class="fas fa-car text-4xl text-slate-300"></i>
+            }
+
+            <div class="absolute top-3 right-3">
+              <span
+                class="text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm backdrop-blur-md"
+                [ngClass]="{
+                  'bg-green-100/90 text-green-700': car.status === 'AVAILABLE',
+                  'bg-orange-100/90 text-orange-700': car.status === 'RENTED',
+                  'bg-red-100/90 text-red-700': car.status === 'MAINTENANCE',
+                }"
+              >
+                {{ car.status || 'AVAILABLE' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="p-5 flex-grow flex flex-col justify-between">
+            <div>
+              <h3 class="text-lg font-bold text-slate-800 mb-1">{{ car.brand }} {{ car.model }}</h3>
+
+              <div class="flex items-center text-slate-500 text-sm mb-4 space-x-2">
+                <span>{{ car.seatingCapacity }} Seats</span>
+                <span>•</span>
+                <span class="capitalize">{{ car.fuelType | lowercase }}</span>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center mt-4 pt-4 border-t border-slate-100">
+              <div class="flex flex-col">
+                <span class="text-lg font-bold text-blue-600"
+                  >Rs. {{ car.pricePerDay | number }}</span
+                >
+                <span class="text-xs text-slate-400 font-medium">per day</span>
+              </div>
+
+              @if (canBook()) {
+                <button (click)="bookCar(car)"
+                  [disabled]="car.status !== 'AVAILABLE'"
+                  class="px-5 py-2.5 bg-slate-900 text-white text-sm font-medium rounded-xl hover:bg-slate-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Book Now
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+      } @empty {
+        <div
+          class="col-span-full py-12 text-center bg-white rounded-2xl border border-slate-200 border-dashed"
+        >
+          <i class="fas fa-car-side text-4xl text-slate-300 mb-3"></i>
+          <h3 class="text-lg font-medium text-slate-900">No cars available</h3>
+          <p class="text-slate-500 mt-1">There are no cars currently listed in the inventory.</p>
+        </div>
+      }
+    </div>
+  }
+</div>
